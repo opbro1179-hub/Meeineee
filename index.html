@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>For You ❤️</title>
+
+<style>
+body {
+  margin:0;
+  font-family: Arial;
+  background:#ffe6f0;
+  color:#ff2e63;
+  overflow:hidden;
+}
+
+.page {
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+}
+
+.active { display:flex; }
+
+img {
+  width:90%;
+  max-width:280px;
+  border-radius:12px;
+  margin:5px;
+}
+
+.kiss-img {
+  width:30%;
+  max-width:120px;
+  cursor:pointer;
+}
+
+button {
+  padding:10px 18px;
+  border:none;
+  border-radius:12px;
+  margin:8px;
+  cursor:pointer;
+  position:relative;
+  z-index:10;
+}
+
+.yes { background:#ff4d88; color:white; }
+.no { background:#ff99bb; color:white; }
+
+/* falling effect */
+.fall {
+  position: fixed;
+  top: -50px;
+  animation: fall 5s linear infinite;
+  pointer-events:none;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0); opacity:1; }
+  100% { transform: translateY(110vh); opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="bgMusic" src="music.mp3" loop></audio>
+<audio id="voice" src="voice.mp3"></audio>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+  <h2>Click ❤️</h2>
+  <button id="startBtn" style="background:none;border:none;">
+    <img src="heart.png">
+  </button>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+  <h2>Maine bhout pyaar se banaya hai ❤️</h2>
+  <p>Agar dekhna chahte ho toh YES dabaiye</p>
+
+  <button class="yes" onclick="startMusic(); startEffect(); nextPage(3)">YES</button>
+  <button class="no" onmouseover="moveButton(this)">NO</button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="page" id="page3">
+  <h2>Riya aapko sabse zyada kya bulati hai? 😏❤️</h2>
+  <input id="answer" style="padding:10px;border-radius:8px;border:none;">
+  <br><br>
+  <button onclick="checkAnswer()">Submit</button>
+  <p id="result"></p>
+</div>
+
+<!-- PAGE 4 (IMAGES VERSION) -->
+<div class="page" id="page4">
+  <h2>Your favourite kiss? 🌚❤️</h2>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+
+    <img src="kiss1.png" class="kiss-img" onclick="nextPage(5)">
+    <img src="kiss2.png" class="kiss-img" onclick="nextPage(5)">
+    <img src="kiss3.png" class="kiss-img" onclick="nextPage(5)">
+
+  </div>
+</div>
+
+<!-- PAGE 5 -->
+<div class="page" id="page5">
+  <h2>
+    Aaheem… mujhe pata tha aapki choice best hi hogi 😌❤️<br>
+    Hum bhi jaldi hi recreate karenge 💋🌚
+  </h2>
+  <button onclick="nextPage(6)">Next</button>
+</div>
+
+<!-- PAGE 6 -->
+<div class="page" id="page6">
+  <img src="photo.png">
+  <br><br>
+  <button onclick="nextPage(7)">Last</button>
+</div>
+
+<!-- PAGE 7 -->
+<div class="page" id="page7">
+  <img src="couple.png">
+  <h2>
+    Happiest Birthday Bachaa 🥹❤️ <br>
+    I love you so much 💕<br>
+    I made this just for you ❤️
+  </h2>
+  <button onclick="playVoice()">Play Voice 🎙️</button>
+</div>
+
+<script>
+function nextPage(n){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page'+n).classList.add('active');
+}
+
+function startMusic(){
+  document.getElementById('bgMusic').play().catch(()=>{});
+}
+
+function moveButton(btn){
+  btn.style.position="absolute";
+  btn.style.top=Math.random()*80+"%";
+  btn.style.left=Math.random()*80+"%";
+}
+
+function checkAnswer(){
+  let ans=document.getElementById("answer").value.trim().toLowerCase();
+  let res=document.getElementById("result");
+
+  if(ans==="mera bacha"){
+    res.innerText="hehe sahi pakde 😌❤️";
+    setTimeout(()=>nextPage(4),1000);
+  } else {
+    res.innerText="hmmm… galat 😏 dobara socho";
+  }
+}
+
+function playVoice(){
+  document.getElementById("voice").play().catch(()=>{});
+}
+
+function startEffect(){
+  setInterval(()=>{
+    let el=document.createElement("img");
+    let items=["hearts.png","glitter.png","confetti.png"];
+    el.src=items[Math.floor(Math.random()*items.length)];
+    el.className="fall";
+    el.style.left=Math.random()*100+"vw";
+    el.style.width=(20+Math.random()*20)+"px";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),5000);
+  },300);
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  document.getElementById("startBtn").addEventListener("click", function(){
+    nextPage(2);
+  });
+});
+</script>
+
+</body>
+</html>
